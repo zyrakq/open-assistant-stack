@@ -1,0 +1,42 @@
+services:
+  open-assistant-minio:
+    container_name: open-assistant-minio
+    image: minio/minio:RELEASE.2023-03-20T20-16-18Z
+    restart: unless-stopped
+    volumes:
+      - open-assistant-minio:/minio_data
+    environment:
+      MINIO_ACCESS_KEY: ${S3_ACCESS_KEY:-minioadmin}
+      MINIO_SECRET_KEY: ${S3_SECRET_KEY}
+    command: minio server /minio_data --console-address ':9001'
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:9000/minio/health/live"
+        ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  open-assistant-create-buckets:
+    image: minio/mc
+    environment:
+      MINIO_ENDPOINT: ${S3_ENDPOINT}
+      MINIO_ACCESS_KEY: ${S3_ACCESS_KEY:-minioadmin}
+      MINIO_SECRET_KEY: ${S3_SECRET_KEY}
+      BUCKET_NAME: ${S3_BUCKET_NAME}
+    depends_on:
+      - open-assistant-minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set minio $${MINIO_ENDPOINT} $${MINIO_ACCESS_KEY} $${MINIO_SECRET_KEY};
+      /usr/bin/mc mb -p minio/$${BUCKET_NAME};
+      exit 0;
+      "
+
+volumes:
+  open-assistant-minio:
+    name: open-assistant-minio

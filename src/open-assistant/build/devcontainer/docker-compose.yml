@@ -1,0 +1,31 @@
+services:
+  open-assistant:
+    networks:
+      - open-assistant-network
+      - open-assistant-workspace-network
+  open-assistant-api:
+    networks:
+      - open-assistant-network
+  open-assistant-worker:
+    networks:
+      - open-assistant-network
+  open-assistant-playground-ui:
+    networks:
+      - open-assistant-network
+  open-assistant-db:
+    networks:
+      - open-assistant-network
+      - open-assistant-workspace-network
+  open-assistant-redis:
+    networks:
+      - open-assistant-network
+      - open-assistant-workspace-network
+  open-assistant-minio:
+    networks:
+      - open-assistant-network
+      - open-assistant-workspace-network
+networks:
+  open-assistant-network:
+    name: open-assistant-network
+  open-assistant-workspace-network:
+    external: true

@@ -1,0 +1,14 @@
+services:
+  open-assistant-redis:
+    container_name: open-assistant-redis
+    image: redis:6-alpine
+    restart: unless-stopped
+    volumes:
+      - open-assistant-redis:/data
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+
+volumes:
+  open-assistant-redis:
+    name: open-assistant-redis

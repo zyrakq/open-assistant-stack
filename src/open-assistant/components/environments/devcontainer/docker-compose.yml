@@ -1,0 +1,17 @@
+services:
+  open-assistant:
+    networks:
+      - open-assistant-workspace-network
+  open-assistant-db:
+    networks:
+      - open-assistant-workspace-network
+  open-assistant-redis:
+    networks:
+      - open-assistant-workspace-network
+  open-assistant-minio:
+    networks:
+      - open-assistant-workspace-network
+
+networks:
+  open-assistant-workspace-network:
+    external: true

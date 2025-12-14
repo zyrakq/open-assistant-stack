@@ -1,0 +1,19 @@
+services:
+  open-assistant:
+    container_name: open-assistant
+    image: ferronserver/ferron:2
+    configs:
+      - source: open-assistant-reverse
+        target: /etc/ferron.kdl
+
+configs:
+  open-assistant-reverse:
+    content: |
+      * {
+          location "/api" {
+              proxy "http://api:8086"
+          }
+          location "/" {
+              proxy "http://open-assistant-playground-ui"
+          }
+      }

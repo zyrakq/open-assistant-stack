@@ -1,0 +1,14 @@
+services:
+  open-assistant:
+    ports:
+      - 80:80
+  open-assistant-db:
+    ports:
+      - 3306:3306
+  open-assistant-redis:
+    ports:
+      - 6379:6379
+  open-assistant-minio:
+    ports:
+      - 9001:9001
+      - 9000:9000
